@@ -3,7 +3,7 @@ service: chromeless-serverless
 custom:
   stage: dev
   debug: "*"
-  awsIotHost: ${env:AWS_IOT_HOST}
+  awsIotHost: "a1uik0pgzpy6tf.iot.us-west-2.amazonaws.com"
   chrome:
     functions:
       - run
@@ -12,7 +12,7 @@ provider:
   name: aws
   runtime: nodejs6.10
   stage: ${self:custom.stage}
-  region: eu-west-1
+  region: us-west-2
   environment:
     DEBUG: ${self:custom.debug}
     AWS_IOT_HOST: ${self:custom.awsIotHost}
@@ -55,13 +55,7 @@ functions:
       - iot:
           sql: "SELECT * FROM 'chrome/new-session'"
     environment:
-      CHROMELESS_S3_BUCKET_NAME:
-        Fn::Join:
-          - ""
-          - - Ref: AWS::AccountId
-            - "-"
-            - Ref: AWS::Region
-            - -chromeless
+      CHROMELESS_S3_BUCKET_NAME: "vx-chromeless"
       CHROMELESS_S3_OBJECT_KEY_PREFIX: ""
       CHROMELESS_S3_BUCKET_URL:
         Fn::GetAtt:
@@ -112,13 +106,7 @@ resources:
     Bucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName:
-          Fn::Join:
-            - ""
-            - - Ref: AWS::AccountId
-              - "-"
-              - Ref: AWS::Region
-              - -chromeless
+        BucketName: "vx-chromeless"
         LifecycleConfiguration:
           Rules:
           - ExpirationInDays: 1
